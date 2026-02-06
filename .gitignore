@@ -17,3 +17,6 @@ db.sqlite3
 
 # Django stuff
 *.log
+
+# path
+SQLITE_PATH
