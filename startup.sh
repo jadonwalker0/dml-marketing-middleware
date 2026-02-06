@@ -5,4 +5,4 @@ echo "Running Django migrations..."
 python manage.py migrate --noinput
 
 echo "Starting Gunicorn..."
-gunicorn config.wsgi:application --bind 0.0.0.0:8000
+gunicorn dml-marketing-middleware --bind 0.0.0.0:8000
