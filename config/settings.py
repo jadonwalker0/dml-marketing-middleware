@@ -81,12 +81,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# the path to our sql database (persist this in Azure by setting SQLITE_PATH=/home/site/db.sqlite3)
+SQLITE_PATH = os.getenv("SQLITE_PATH", str(BASE_DIR / "db.sqlite3"))
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': "SQLITE_PATH"
-        }
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": SQLITE_PATH,
+    }
 }
+
 
 
 # Password validation
@@ -129,9 +133,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# the path to our sql database
-SQLITE_PATH = os.getenv("SQLITE_PATH", str(BASE_DIR / "db.sqlite3"))
 
 LOGGING = {
     "version": 1,
