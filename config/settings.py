@@ -34,8 +34,16 @@ allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
 ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()] or ["*"]
 
 # Azure App Service forwards HTTPS traffic; tell Django the original scheme was https
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-USE_X_FORWARDED_HOST = True
+allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()]
+
+# Allow Azure internal health checks
+ALLOWED_HOSTS += ["169.254.129.2", "localhost", "127.0.0.1"]
+
+# If still empty, keep it permissive for now
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["*"]
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net"
