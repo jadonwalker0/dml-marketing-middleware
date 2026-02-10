@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import re
 from pathlib import Path
 
 
@@ -30,18 +31,14 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 
-allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()] or ["*"]
+allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
 
-# Azure App Service forwards HTTPS traffic; tell Django the original scheme was https
-allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()]
+# Always allow local + Azure internal traffic
+ALLOWED_HOSTS += ["localhost", "127.0.0.1"]
 
-# Allow Azure internal health checks
-ALLOWED_HOSTS += ["169.254.129.2", "localhost", "127.0.0.1"]
-
-# If still empty, keep it permissive for now
-if not ALLOWED_HOSTS:
+# Temporary: allow everything while stabilizing Azure infra
+if os.getenv("AZURE_ALLOW_INTERNAL_HOSTS", "1") == "1":
     ALLOWED_HOSTS = ["*"]
 
 
