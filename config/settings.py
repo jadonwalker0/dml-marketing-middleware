@@ -33,6 +33,17 @@ DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
 ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()] or ["*"]
 
+# Azure App Service forwards HTTPS traffic; tell Django the original scheme was https
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net"
+]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 # Application definition
 
