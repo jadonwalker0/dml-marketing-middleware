@@ -2,21 +2,16 @@ import os
 import json
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
 
-SERVICEBUS_CONN_STR = os.getenv("AZURE_SERVICEBUS_CONNECTION_STRING", "")
-QUEUE_NAME = os.getenv("AZURE_SERVICEBUS_QUEUE_NAME", "lead-te-upsert")
+SERVICEBUS_CONNECTION_STRING = os.getenv("SERVICEBUS_CONNECTION_STRING", "")
+SERVICEBUS_QUEUE_NAME = os.getenv("SERVICEBUS_QUEUE_NAME", "webform-leads")
 
-def enqueue_te_upsert(*, lead_submission_id: str, lo_slug: str) -> None:
-    if not SERVICEBUS_CONN_STR:
-        raise RuntimeError("Missing AZURE_SERVICEBUS_CONNECTION_STRING")
+def enqueue_lead(submission_id: str) -> None:
+    # If not configured, don't crash locally
+    if not SERVICEBUS_CONNECTION_STRING:
+        return
 
-    body = {
-        "action": "UPSERT_TE_CONTACT",
-        "lead_submission_id": lead_submission_id,
-        "lo_slug": lo_slug,
-    }
+    body = {"submission_id": submission_id}
 
-    msg = ServiceBusMessage(json.dumps(body))
-
-    with ServiceBusClient.from_connection_string(SERVICEBUS_CONN_STR) as client:
-        with client.get_queue_sender(queue_name=QUEUE_NAME) as sender:
-            sender.send_messages(msg)
+    with ServiceBusClient.from_connection_string(SERVICEBUS_CONNECTION_STRING) as client:
+        with client.get_queue_sender(queue_name=SERVICEBUS_QUEUE_NAME) as sender:
+            sender.send_messages(ServiceBusMessage(json.dumps(body)))
