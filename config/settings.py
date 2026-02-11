@@ -28,17 +28,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY is not set")
 
-allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
-
-website_hostname = os.getenv("WEBSITE_HOSTNAME")
-if website_hostname:
-    ALLOWED_HOSTS.append(website_hostname)
-
 # Azure health probes come from changing 169.254.* IPs
 # Simplest stable option:
 ALLOWED_HOSTS = ["*"]
-
 
 
 CSRF_TRUSTED_ORIGINS = [
