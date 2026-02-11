@@ -38,6 +38,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://middleware-api-fagee5h3hzbtftca.scm.eastus2-01.azurewebsites.net",
 ]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
