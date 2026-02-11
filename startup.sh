@@ -1,26 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+cd /home/site/app
+
 echo "== Startup running =="
 echo "PWD: $(pwd)"
 ls -la | head -80
 
-echo "== Python being used =="
-which python || true
-python -V || true
+# Activate the venv that actually has Django installed
+source /home/site/app/antenv/bin/activate
 
-echo "== Install deps if needed (safe no-op if already installed) =="
-pip -V || true
+echo "== Python =="
+which python
+python -V
+
+echo "== Django check =="
+python -c "import django; print('Django OK:', django.get_version())"
 
 echo "== Migrations =="
-python manage.py makemigrations --noinput || true
 python manage.py migrate --noinput
-
-echo "== Quick sanity checks =="
-python - <<'PY'
-from django.conf import settings
-print("DB PATH:", settings.DATABASES["default"]["NAME"])
-PY
 
 echo "== Start gunicorn =="
 exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --access-logfile - --error-logfile -
