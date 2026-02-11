@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-# path to this file: "dml-marketing-middleware/config/>file<"
+# path to this file: "dml-marketing-middleware/config/settings.py"
 import os
 import re
 from pathlib import Path
@@ -48,18 +48,26 @@ if os.getenv("AZURE_ALLOW_INTERNAL_HOSTS", "1") == "1":
     ALLOWED_HOSTS = ["*"]
 
 
-
+# CSRF and Security Settings - FIXED FOR AZURE
 CSRF_TRUSTED_ORIGINS = [
     "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net",
 ]
 
+# Critical CSRF fixes for Azure App Service
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False  # Must be False for admin login to work
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS = False
 
+# Session cookie settings
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Trust Azure proxy headers
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
+USE_X_FORWARDED_PORT = True
 
 # Application definition
 
@@ -72,6 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'leads',
+    'directory',
 ]
 
 MIDDLEWARE = [
