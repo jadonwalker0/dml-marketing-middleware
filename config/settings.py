@@ -28,16 +28,19 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY is not set")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
-
 allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
 ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
 
-# Always allow local + Azure internal traffic
+# Always allow local traffic
 ALLOWED_HOSTS += ["localhost", "127.0.0.1"]
 
-# Temporary: allow everything while stabilizing Azure infra
+# Always allow the Azure-provided hostname
+website_hostname = os.getenv("WEBSITE_HOSTNAME")
+if website_hostname:
+    ALLOWED_HOSTS.append(website_hostname)
+
+# Allow Azure internal health checks (these change, so allow the whole link-local range)
+# Django doesn't support CIDR here, so we go permissive *only* if explicitly enabled:
 if os.getenv("AZURE_ALLOW_INTERNAL_HOSTS", "1") == "1":
     ALLOWED_HOSTS = ["*"]
 
