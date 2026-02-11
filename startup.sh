@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
-echo "PWD=$(pwd)"
-echo "PY=$(which python || true)"
-python --version || true
+# Prefer persistent app path if it exists
+if [ -f /home/site/app/manage.py ]; then
+  cd /home/site/app
+else
+  # Oryx usually sets APP_PATH. Fall back to the latest extracted folder.
+  if [ -n "$APP_PATH" ] && [ -f "$APP_PATH/manage.py" ]; then
+    cd "$APP_PATH"
+  else
+    cd "$(ls -td /tmp/8de* 2>/dev/null | head -1)"
+  fi
+fi
 
-# quick sanity checks
-python -c "import django; print('DJANGO_OK', django.get_version())"
+echo "Running in: $(pwd)"
+PYBIN="$(command -v python || command -v python3)"
+echo "Using: $PYBIN"
+$PYBIN -V
 
-# show DB + LO slugs
-python manage.py shell -c "from django.conf import settings; from directory.models import LoanOfficer; print('RUNTIME_DB=', settings.DATABASES['default']['NAME']); print('RUNTIME_LO_COUNT=', LoanOfficer.objects.count()); print('RUNTIME_LO_SLUGS=', list(LoanOfficer.objects.values_list('slug', flat=True)) )"
+$PYBIN manage.py migrate --noinput
 
-# migrate + run server
-# note adding for commit
-python manage.py migrate --noinput
 exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --access-logfile - --error-logfile -
