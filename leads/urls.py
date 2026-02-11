@@ -1,3 +1,5 @@
+# path to this file: "dml-marketing-middleware/leads/>file<"
+
 from django.urls import path
 from .views import webform_lead
 

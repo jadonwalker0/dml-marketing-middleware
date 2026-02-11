@@ -1,3 +1,5 @@
+# path to this file: "dml-marketing-middleware/core/>file<"
+
 from django.contrib import admin
 from .models import LoanOfficer
 

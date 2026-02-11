@@ -1,3 +1,5 @@
+# path to this file: "dml-marketing-middleware/leads/>file<"
+
 import os
 import json
 from azure.servicebus import ServiceBusClient, ServiceBusMessage

@@ -1,3 +1,4 @@
+# path to this file: "dml-marketing-middleware/>file<"
 #!/usr/bin/env bash
 set -euo pipefail
 

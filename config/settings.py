@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# path to this file: "dml-marketing-middleware/config/>file<"
 import os
 import re
 from pathlib import Path
@@ -30,13 +31,28 @@ if not SECRET_KEY:
 
 # Azure health probes come from changing 169.254.* IPs
 # Simplest stable option:
-ALLOWED_HOSTS = ["*"]
+allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
+
+# Always allow Azure internal health checks + local
+ALLOWED_HOSTS += [
+    "localhost", "127.0.0.1",
+    "169.254.129.1", "169.254.129.2", "169.254.129.3", "169.254.129.4",
+]
+
+# Add your site host explicitly
+ALLOWED_HOSTS += ["middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net"]
+
+# Optional: keep permissive while stabilizing
+if os.getenv("AZURE_ALLOW_INTERNAL_HOSTS", "1") == "1":
+    ALLOWED_HOSTS = ["*"]
+
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net",
-    "https://middleware-api-fagee5h3hzbtftca.scm.eastus2-01.azurewebsites.net",
 ]
+
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
