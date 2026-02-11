@@ -34,8 +34,10 @@ ALLOWED_HOSTS = ["*"]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net"
+    "https://middleware-api-fagee5h3hzbtftca.eastus2-01.azurewebsites.net",
+    "https://middleware-api-fagee5h3hzbtftca.scm.eastus2-01.azurewebsites.net",
 ]
+
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
