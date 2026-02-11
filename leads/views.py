@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseNotAllowed
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from directory.models import LoanOfficer
+from core.models import LoanOfficer
 from .models import LeadSubmission, LeadStatus
 from .servicebus import enqueue_lead
 
