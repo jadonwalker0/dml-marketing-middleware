@@ -20,4 +20,6 @@ $PYBIN -V
 
 $PYBIN manage.py migrate --noinput
 
+$PYBIN manage.py shell -c "from directory.models import LoanOfficer; lo, created = LoanOfficer.objects.get_or_create(slug='test-lo', defaults={'first_name':'Jadon','last_name':'Test','email':'marketing@directmortgageloans.com','is_active':True}); print('LO created=' + str(created))"
+
 exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --access-logfile - --error-logfile -
