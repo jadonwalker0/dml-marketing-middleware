@@ -129,7 +129,7 @@ def process_message(message):
         
         data = json.loads(body)
         
-        submission_id = data.get('submission_id')
+        submission_id = data.get('lead_submission_id')
         if not submission_id:
             logger.error("Message missing submission_id")
             logger.error(f"Parsed data: {data}")
