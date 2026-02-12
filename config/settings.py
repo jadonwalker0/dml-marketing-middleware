@@ -114,12 +114,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # the path to our sql database (persist this in Azure by setting SQLITE_PATH=/home/site/db.sqlite3)
-SQLITE_PATH = os.getenv("SQLITE_PATH", str(BASE_DIR / "db.sqlite3"))
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": SQLITE_PATH,
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DB_NAME", SQLITE_PATH),
+        "USER": os.environ.get("DB_USER", ""),
+        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+        "HOST": os.environ.get("DB_HOST", ""),
+        "PORT": os.environ.get("DB_PORT", ""),
+        "OPTIONS": {
+            # Azure MySQL requires TLS. This tells the driver to use SSL.
+            "ssl": {"ssl_mode": "REQUIRED"},
+        } if os.environ.get("DB_ENGINE") == "django.db.backends.mysql" else {},
     }
 }
 
