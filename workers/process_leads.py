@@ -131,7 +131,7 @@ def process_message(message):
     """
     try:
         # Parse message body
-        body = str(message)
+        body = message.body.decode('utf-8')
         data = json.loads(body)
         
         submission_id = data.get('submission_id')
