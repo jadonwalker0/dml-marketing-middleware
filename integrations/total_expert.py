@@ -41,7 +41,7 @@ class TotalExpertClient:
         
         try:
             response = requests.post(
-                f"{self.base_url}/v1/contacts",
+                f"{self.base_url}/v1/token",
                 data={
                     'grant_type': 'client_credentials',
                     'client_id': self.client_id,
