@@ -29,11 +29,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Service Bus configuration
-SERVICEBUS_CONNECTION_STRING = os.getenv("SERVICEBUS_CONNECTION_STRING")
-SERVICEBUS_QUEUE_NAME = os.getenv("SERVICEBUS_QUEUE_NAME", "webform-leads")
+SERVICEBUS_CONNECTION_STRING = os.getenv("AZURE_SERVICEBUS_CONNECTION_STRING")
+SERVICEBUS_QUEUE_NAME = os.getenv("AZURE_SERVICEBUS_QUEUE_NAME", "webform-leads")
 
 if not SERVICEBUS_CONNECTION_STRING:
-    raise ValueError("SERVICEBUS_CONNECTION_STRING environment variable is required")
+    raise ValueError("AZURE_SERVICEBUS_CONNECTION_STRING environment variable is required")
 
 
 def process_lead(submission_id):
