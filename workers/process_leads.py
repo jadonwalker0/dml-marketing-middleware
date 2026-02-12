@@ -120,23 +120,19 @@ def process_lead(submission_id):
 
 
 def process_message(message):
-    """
-    Process a single Service Bus message.
-    
-    Args:
-        message: ServiceBusReceivedMessage object
-    
-    Returns:
-        bool: True if processing succeeded, False otherwise
-    """
     try:
-        # Parse message body
-        body = message.body.decode('utf-8')
+        # Parse message body - CORRECT way for Azure Service Bus
+        body_bytes = b''.join(message.body)  # ← Changed
+        body = body_bytes.decode('utf-8')
+        
+        logger.info(f"Raw message body: {body}")  # Debug
+        
         data = json.loads(body)
         
         submission_id = data.get('submission_id')
         if not submission_id:
             logger.error("Message missing submission_id")
+            logger.error(f"Parsed data: {data}")
             return False
         
         # Process the lead
@@ -144,6 +140,7 @@ def process_message(message):
     
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse message JSON: {e}")
+        logger.error(f"Body was: {body}")
         return False
     except Exception as e:
         logger.error(f"Error processing message: {e}", exc_info=True)
