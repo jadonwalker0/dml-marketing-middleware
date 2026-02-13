@@ -52,7 +52,9 @@ def webform_lead(request):
     if not lo_slug:
         logger.warning("Request missing lo_slug")
         return JsonResponse({"error": "lo_slug is required"}, status=400)
-    
+    # DEBUG: Log the actual payload received
+    logger.info(f"WEBHOOK PAYLOAD RECEIVED: {payload}")
+
     # Find the loan officer
     try:
         loan_officer = LoanOfficer.objects.get(slug__iexact=lo_slug, is_active=True)
