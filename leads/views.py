@@ -11,6 +11,7 @@ from core.models import LoanOfficer
 from .models import LeadSubmission, LeadStatus
 from .servicebus import enqueue_lead
 
+BUILD_TAG = "v1_mysql_commit_queue_fix_01"
 
 @csrf_exempt  # Formidable posts from public pages
 def webform_lead(request):
@@ -72,8 +73,7 @@ def webform_lead(request):
     # If Service Bus enqueue fails, it will raise AFTER commit.
     # Capture that by wrapping enqueue in a safe helper if you want.
 
-    return JsonResponse({
-        "ok": True,
-        "lead_submission_id": str(submission.id),
-        "instance_id": os.environ.get("WEBSITE_INSTANCE_ID"),
-    }, status=202)
+    return JsonResponse(
+    {"ok": True, "lead_submission_id": str(submission.id), "build_tag": BUILD_TAG},
+    status=202
+)
