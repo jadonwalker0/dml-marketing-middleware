@@ -8,6 +8,7 @@ import time
 import logging
 from azure.servicebus import ServiceBusClient
 from azure.servicebus.exceptions import ServiceBusError
+from django.db import connection
 
 # Setup Django environment
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,6 +16,7 @@ sys.path.insert(0, project_root)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
+print("WORKER DB:", connection.vendor, connection.settings_dict.get("HOST"), connection.settings_dict.get("NAME"))
 
 # Now we can import Django models
 from leads.models import LeadSubmission, LeadStatus
