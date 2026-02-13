@@ -123,7 +123,7 @@ DATABASES = {
         "HOST": os.environ["DB_HOST"],
         "PORT": os.environ.get("DB_PORT", "3306"),
         "OPTIONS": {
-            "ssl": {"ssl": "True"},
+            "ssl": {"ca": "/etc/ssl/certs/ca-certificates.crt"},
         },
     }
 }
