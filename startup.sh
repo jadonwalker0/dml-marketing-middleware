@@ -4,16 +4,22 @@ set -euo pipefail
 echo "Starting DML Marketing Middleware..."
 
 # Navigate to app directory
-if [ -f /home/site/wwwroot/manage.py ]; then
-  cd /home/site/wwwroot
-else
-  echo "ERROR: manage.py not found"
-  exit 1
-fi
+cd /home/site/wwwroot
 
 echo "Running in: $(pwd)"
 echo "Database: MySQL on Azure"
 python -V
+
+# Activate virtual environment if it exists
+if [ -d "/home/site/wwwroot/antenv" ]; then
+    source /home/site/wwwroot/antenv/bin/activate
+fi
+
+# Install dependencies if not already installed
+if ! python -c "import django" 2>/dev/null; then
+    echo "Installing dependencies..."
+    pip install -r requirements.txt --break-system-packages
+fi
 
 # Run migrations
 echo "Running migrations..."
@@ -37,7 +43,7 @@ else:
 EOF
 fi
 
-# Display database connection info (without password)
+# Display database connection info
 python manage.py shell -c "from django.conf import settings; db = settings.DATABASES['default']; print(f\"Database: {db['ENGINE']} @ {db['HOST']}:{db['PORT']}/{db['NAME']}\")"
 
 echo "Starting Gunicorn..."
