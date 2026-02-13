@@ -55,7 +55,7 @@ def get_te_access_token():
     
     try:
         response = requests.post(
-            f"{TE_API_URL}/oauth/token",
+            f"{TE_API_URL}/v1/token",
             data={
                 "grant_type": "client_credentials",
                 "client_id": TE_CLIENT_ID,
