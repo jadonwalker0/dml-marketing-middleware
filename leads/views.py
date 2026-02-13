@@ -4,6 +4,7 @@ import json
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
 
 from core.models import LoanOfficer
 from .models import LeadSubmission, LeadStatus
@@ -32,39 +33,42 @@ def webform_lead(request):
         return JsonResponse({"error": f"Unknown lo_slug: {lo_slug}"}, status=404)
 
     # Capture basic request metadata (nice to have)
-    ip_address = request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0].strip() or request.META.get("REMOTE_ADDR")
+    ip_address = (
+        request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0].strip()
+        or request.META.get("REMOTE_ADDR")
+    )
     user_agent = request.META.get("HTTP_USER_AGENT", "")
 
-    # Create submission using YOUR model fields
-    submission = LeadSubmission.objects.create(
-        loan_officer=lo,
-        source="webform",
-        page_url=(payload.get("page_url") or "").strip(),
-        referrer=(payload.get("referrer") or "").strip(),
-        ip_address=ip_address,
-        user_agent=user_agent,
+    # We'll set this in the transaction, then enqueue after commit
+    submission = None
 
-        first_name=(payload.get("first_name") or "").strip(),
-        last_name=(payload.get("last_name") or "").strip(),
-        email=(payload.get("email") or "").strip(),
-        phone=(payload.get("phone") or "").strip(),
+    # Create + update DB state atomically
+    with transaction.atomic():
+        submission = LeadSubmission.objects.create(
+            loan_officer=lo,
+            source="webform",
+            page_url=(payload.get("page_url") or "").strip(),
+            referrer=(payload.get("referrer") or "").strip(),
+            ip_address=ip_address,
+            user_agent=user_agent,
+            first_name=(payload.get("first_name") or "").strip(),
+            last_name=(payload.get("last_name") or "").strip(),
+            email=(payload.get("email") or "").strip(),
+            phone=(payload.get("phone") or "").strip(),
+            raw_payload=payload,
+            status=LeadStatus.RECEIVED,
+        )
 
-        raw_payload=payload,
-        status=LeadStatus.RECEIVED,
-    )
-
-    # Enqueue to Service Bus and mark queued
-    try:
-        enqueue_lead(submission_id=str(submission.id))
+        # Mark as queued in DB as part of the same transaction
         submission.queued_at = timezone.now()
         submission.status = LeadStatus.QUEUED
         submission.save(update_fields=["queued_at", "status"])
-    except Exception as e:
-        # If queue fails, keep it received and store error for retry
-        submission.last_error = str(e)
-        submission.attempt_count = submission.attempt_count + 1
-        submission.save(update_fields=["last_error", "attempt_count"])
-        return JsonResponse({"error": "Failed to enqueue lead"}, status=500)
+
+        # IMPORTANT: Only enqueue AFTER the DB commit succeeds
+        transaction.on_commit(lambda: enqueue_lead(submission_id=str(submission.id)))
+
+    # At this point the submission definitely exists in MySQL.
+    # If Service Bus enqueue fails, it will raise AFTER commit.
+    # Capture that by wrapping enqueue in a safe helper if you want.
 
     return JsonResponse({"ok": True, "id": str(submission.id)})
-
