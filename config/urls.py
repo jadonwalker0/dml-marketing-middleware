@@ -16,10 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.http import JsonResponse
+from django.db import connection
+import os
 
 # path to this file: "dml-marketing-middleware/config/>file<"
+
+def db_debug(request):
+    return JsonResponse({
+        "vendor": connection.vendor,
+        "host": connection.settings_dict.get("HOST"),
+        "name": connection.settings_dict.get("NAME"),
+        "settings_module": os.environ.get("DJANGO_SETTINGS_MODULE"),
+        "instance_id": os.environ.get("WEBSITE_INSTANCE_ID") or os.environ.get("WEBSITES_INSTANCE_ID"),
+    })
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("leads.urls")),
+    path("_debug/db", db_debug),
 ]
