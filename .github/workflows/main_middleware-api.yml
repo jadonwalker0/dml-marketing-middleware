@@ -58,5 +58,4 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'middleware-api'
-          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75509150E64A49CBB624A41BD183CBA3 }}
