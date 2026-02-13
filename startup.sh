@@ -7,25 +7,28 @@ echo "Starting DML Marketing Middleware..."
 cd /home/site/wwwroot
 
 echo "Running in: $(pwd)"
-echo "Database: MySQL on Azure"
+echo "Python version:"
 python -V
 
-# Activate virtual environment if it exists
-if [ -d "/home/site/wwwroot/antenv" ]; then
+# Find and activate the virtual environment that Azure creates
+if [ -d "antenv" ]; then
+    echo "Activating antenv..."
+    source antenv/bin/activate
+elif [ -d "/home/site/wwwroot/antenv" ]; then
+    echo "Activating /home/site/wwwroot/antenv..."
     source /home/site/wwwroot/antenv/bin/activate
-fi
-
-# Install dependencies if not already installed
-if ! python -c "import django" 2>/dev/null; then
-    echo "Installing dependencies..."
+else
+    echo "No virtual environment found, installing packages globally..."
     pip install -r requirements.txt --break-system-packages
 fi
 
-# Run migrations
+# Verify Django is available
+python -c "import django; print(f'Django version: {django.get_version()}')"
+
 echo "Running migrations..."
 python manage.py migrate --noinput
 
-# Create superuser if environment variables are set
+# Create superuser
 if [ -n "${DJANGO_CREATE_SUPERUSER:-}" ] && [ "${DJANGO_CREATE_SUPERUSER}" = "1" ]; then
   echo "Checking for superuser..."
   python manage.py shell <<EOF
@@ -42,9 +45,6 @@ else:
     print(f"Superuser '{username}' already exists")
 EOF
 fi
-
-# Display database connection info
-python manage.py shell -c "from django.conf import settings; db = settings.DATABASES['default']; print(f\"Database: {db['ENGINE']} @ {db['HOST']}:{db['PORT']}/{db['NAME']}\")"
 
 echo "Starting Gunicorn..."
 exec gunicorn config.wsgi:application \
