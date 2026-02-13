@@ -1,0 +1,6 @@
+Django==5.0.12
+azure-servicebus==7.12.1
+requests==2.31.0
+mysqlclient==2.2.0
+python-dotenv==1.0.1
+azure-core==1.38.0
