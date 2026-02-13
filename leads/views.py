@@ -1,5 +1,6 @@
 # path to this file: "dml-marketing-middleware/leads/>file<"
 
+import os
 import json
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.utils import timezone
@@ -71,4 +72,8 @@ def webform_lead(request):
     # If Service Bus enqueue fails, it will raise AFTER commit.
     # Capture that by wrapping enqueue in a safe helper if you want.
 
-    return JsonResponse({"ok": True, "id": str(submission.id)})
+    return JsonResponse({
+        "ok": True,
+        "lead_submission_id": str(submission.id),
+        "instance_id": os.environ.get("WEBSITE_INSTANCE_ID"),
+    }, status=202)
