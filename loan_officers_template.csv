@@ -1,0 +1,4 @@
+slug,first_name,last_name,email,phone,te_owner_id,is_active
+john-smith,John,Smith,john.smith@directmortgageloans.com,555-0001,TE_USER_001,1
+jane-doe,Jane,Doe,jane.doe@directmortgageloans.com,555-0002,TE_USER_002,1
+michael-johnson,Michael,Johnson,michael.johnson@directmortgageloans.com,555-0003,TE_USER_003,1
