@@ -36,7 +36,7 @@ class LoanOfficer(models.Model):
         verbose_name = "Loan Officer"
         verbose_name_plural = "Loan Officers"
         ordering = ["slug"]
-        db_table = "loan_officers"
+        db_table = "core_loanofficer"
     
     def save(self, *args, **kwargs):
         """Normalize slug to lowercase before saving."""

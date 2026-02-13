@@ -69,7 +69,7 @@ class LeadSubmission(models.Model):
         verbose_name = "Lead Submission"
         verbose_name_plural = "Lead Submissions"
         ordering = ["-submitted_at"]
-        db_table = "lead_submissions"
+        db_table = "leads_leadsubmission"
         indexes = [
             models.Index(fields=["-submitted_at"]),
             models.Index(fields=["status"]),
