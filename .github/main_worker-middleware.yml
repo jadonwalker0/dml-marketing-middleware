@@ -1,0 +1,36 @@
+name: Build and deploy Python worker to Azure Web App - middleware-worker
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build venv + install deps
+        run: |
+          python -m venv antenv
+          source antenv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create deploy package (zip)
+        run: |
+          zip -r app.zip . -x "antenv/*" ".git/*" ".github/*" "__pycache__/*"
+
+      - name: Deploy to Azure Web App (worker)
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: middleware-worker
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_WORKER }}
+          package: app.zip
