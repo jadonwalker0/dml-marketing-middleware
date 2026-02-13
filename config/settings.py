@@ -123,11 +123,10 @@ DATABASES = {
         "HOST": os.environ["DB_HOST"],
         "PORT": os.environ.get("DB_PORT", "3306"),
         "OPTIONS": {
-            "ssl": {"ssl_mode": "REQUIRED"},
+            "ssl": {"ssl": "True"},
         },
     }
 }
-
 
 
 # Password validation
