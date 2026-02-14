@@ -92,7 +92,9 @@ def sync_lead_to_total_expert(submission):
             "last_name": submission.last_name,
             "email": submission.email,
             "phone_cell": submission.phone,
-            "owner_id": submission.loan_officer.te_owner_id
+            "owner": {
+                "external_id": submission.loan_officer.te_owner_id
+            }
         }
         
         # Create/update contact in Total Expert
