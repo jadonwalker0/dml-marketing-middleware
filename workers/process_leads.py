@@ -88,12 +88,11 @@ def sync_lead_to_total_expert(submission):
         
         # Prepare contact data
         contact_data = {
-            "firstName": submission.first_name,
-            "lastName": submission.last_name,
+            "first_name": submission.first_name,
+            "last_name": submission.last_name,
             "email": submission.email,
-            "phone": submission.phone,
-            "ownerId": submission.loan_officer.te_owner_id,  # Assign to LO
-            "source": "Website Form",
+            "phone_cell": submission.phone,
+            "owner_id": submission.loan_officer.te_owner_id
         }
         
         # Create/update contact in Total Expert
