@@ -94,11 +94,6 @@ def sync_lead_to_total_expert(submission):
             "phone": submission.phone,
             "ownerId": submission.loan_officer.te_owner_id,  # Assign to LO
             "source": "Website Form",
-            "customFields": {
-                "pageUrl": submission.page_url,
-                "referrer": submission.referrer,
-                "submittedAt": submission.submitted_at.isoformat(),
-            }
         }
         
         # Create/update contact in Total Expert
