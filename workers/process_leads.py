@@ -91,7 +91,8 @@ def sync_lead_to_total_expert(submission):
             "first_name": submission.first_name,
             "last_name": submission.last_name,
             "email": submission.email,
-            "phone_cell": submission.phone,  # CHANGE TO THIS
+            "phone_cell": submission.phone,
+            "source": "webform",
             "owner": {
                 "external_id": submission.loan_officer.te_owner_id,
                 "email": submission.loan_officer.email
