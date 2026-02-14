@@ -13,6 +13,13 @@ fi
 
 echo "Running in: $(pwd)"
 echo "Database: MySQL on Azure"
+
+# Activate virtual environment if it exists
+if [ -d "antenv" ]; then
+  source antenv/bin/activate
+  echo "Activated antenv virtual environment"
+fi
+
 python -V
 
 # Run migrations
