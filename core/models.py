@@ -32,11 +32,13 @@ class LoanOfficer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    """
     class Meta:
         verbose_name = "Loan Officer"
         verbose_name_plural = "Loan Officers"
         ordering = ["slug"]
         db_table = "loan_officers"
+    """
     
     def save(self, *args, **kwargs):
         """Normalize slug to lowercase before saving."""

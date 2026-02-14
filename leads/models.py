@@ -65,6 +65,7 @@ class LeadSubmission(models.Model):
     queued_at = models.DateTimeField(blank=True, null=True, help_text="When this lead was queued to Service Bus")
     synced_at = models.DateTimeField(blank=True, null=True, help_text="When this lead was successfully synced to Total Expert")
     
+    """
     class Meta:
         verbose_name = "Lead Submission"
         verbose_name_plural = "Lead Submissions"
@@ -76,6 +77,7 @@ class LeadSubmission(models.Model):
             models.Index(fields=["email"]),
             models.Index(fields=["phone"]),
         ]
+        """
     
     def __str__(self):
         name = f"{self.first_name} {self.last_name}".strip()
