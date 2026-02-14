@@ -95,7 +95,7 @@ def sync_lead_to_total_expert(submission):
             "owner": {
                 "external_id": submission.loan_officer.te_owner_id
             },
-            "groups": [LO_Webform_Leads]
+            "groups": ["LO_Webform_Leads"]
         }
         
         # Create/update contact in Total Expert
