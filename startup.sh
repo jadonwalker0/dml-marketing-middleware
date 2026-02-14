@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+##!/usr/bin/env bash
 set -euo pipefail
 
 echo "Starting DML Marketing Middleware..."
@@ -31,6 +31,9 @@ if not User.objects.filter(username=username).exists():
     print(f"Superuser '{username}' created")
 EOF
 fi
+
+echo "Starting Lead Processing Worker..."
+python workers/process_leads.py &
 
 echo "Starting Gunicorn..."
 exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120 --access-logfile - --error-logfile -
