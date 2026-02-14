@@ -15,7 +15,7 @@ python -c "import django; print('Django version:', django.get_version())" || {
 }
 
 echo "Running migrations..."
-python manage.py migrate --noinput
+python manage.py migrate --fake-initial --noinput
 
 # Create superuser
 if [ "${DJANGO_CREATE_SUPERUSER:-0}" = "1" ]; then
