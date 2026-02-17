@@ -60,3 +60,8 @@
 .navbar .navbar-text {
     color: #ffffff !important;
 }
+
+/* Add button in top right of list views */
+.object-tools a {
+    color: #ffffff !important;
+}
