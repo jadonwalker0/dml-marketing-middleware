@@ -51,6 +51,9 @@ python manage.py shell -c "from django.conf import settings; db = settings.DATAB
 echo "Starting Lead Processing Worker..."
 python workers/process_leads.py &
 
+# Collect static files (needed for Jazzmin CSS/JS)
+python manage.py collectstatic --noinput
+
 # Start Gunicorn in foreground
 echo "Starting Gunicorn..."
 exec gunicorn config.wsgi:application \

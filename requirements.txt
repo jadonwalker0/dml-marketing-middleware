@@ -4,3 +4,4 @@ azure-servicebus==7.12.1
 python-dotenv==1.0.1
 azure-core==1.38.0
 mysqlclient==2.2.0
+django-jazzmin==3.0.1

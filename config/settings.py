@@ -9,6 +9,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = "static/"
 
 # Security Settings
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
@@ -54,6 +56,7 @@ if not DEBUG:
 
 # Application definition
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -223,3 +226,87 @@ SERVICEBUS_QUEUE_NAME = os.getenv("SERVICEBUS_QUEUE_NAME", "webform-leads")
 TOTAL_EXPERT_CLIENT_ID = os.getenv("TOTAL_EXPERT_CLIENT_ID", "")
 TOTAL_EXPERT_CLIENT_SECRET = os.getenv("TOTAL_EXPERT_CLIENT_SECRET", "")
 TOTAL_EXPERT_API_URL = os.getenv("TOTAL_EXPERT_API_URL", "https://api.totalexpert.net")
+
+JAZZMIN_SETTINGS = {
+    # Title in the browser tab
+    "site_title": "DML Marketing Admin",
+
+    # Title on the login screen and top of sidebar
+    "site_header": "Direct Mortgage Loans",
+
+    # Brand text in the top-left of the sidebar
+    "site_brand": "DML Marketing",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to the DML Marketing Middleware",
+
+    # Copyright footer
+    "copyright": "Direct Mortgage Loans",
+
+    # Top nav links
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "leads.LeadSubmission"},
+        {"model": "core.LoanOfficer"},
+    ],
+
+    # Sidebar icons — using Font Awesome classes
+    "icons": {
+        "auth":                     "fas fa-users-cog",
+        "auth.user":                "fas fa-user",
+        "auth.Group":               "fas fa-users",
+        "core.LoanOfficer":         "fas fa-id-badge",
+        "leads.LeadSubmission":     "fas fa-funnel-dollar",
+        "directory.LoanOfficer":    "fas fa-address-card",
+    },
+
+    "default_icon_parents":  "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    # Sidebar is expanded by default
+    "navigation_expanded": True,
+    "show_sidebar": True,
+
+    # Order apps in the sidebar
+    "order_with_respect_to": ["leads", "core", "directory", "auth"],
+
+    # Opens related models in a modal popup instead of new page
+    "related_modal_active": True,
+
+    # Show the UI builder toggle in the top bar (great for live tweaking)
+    "show_ui_builder": True,
+
+    # Use the search bar on list views
+    "search_model": ["leads.LeadSubmission", "core.LoanOfficer"],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_flat_style": False,
+    "theme": "flatly",          # Clean, professional Bootstrap theme
+    "dark_mode_theme": "darkly", # Auto dark mode when OS is dark
+    "button_classes": {
+        "primary":   "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info":      "btn-info",
+        "warning":   "btn-warning",
+        "danger":    "btn-danger",
+        "success":   "btn-success",
+    },
+}
