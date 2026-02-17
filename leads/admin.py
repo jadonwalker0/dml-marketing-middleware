@@ -30,7 +30,10 @@ class LeadSubmissionAdmin(admin.ModelAdmin):
         "user_agent",
     )
     date_hierarchy = "submitted_at"
-    
+
+    # so /admin shows the table by submitted at field!
+    ordering = ("-submitted_at",)
+
     fieldsets = (
         ("Lead Information", {
             "fields": ("loan_officer", "source", "first_name", "last_name", "email", "phone")

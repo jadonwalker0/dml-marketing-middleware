@@ -280,6 +280,9 @@ JAZZMIN_SETTINGS = {
 
     # Use the search bar on list views
     "search_model": ["leads.LeadSubmission", "core.LoanOfficer"],
+
+    #reference my custom css in core/static/css/file
+    "custom_css": "css/admin-custom.css",
 }
 
 JAZZMIN_UI_TWEAKS = {

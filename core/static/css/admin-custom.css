@@ -1,0 +1,14 @@
+/* DML Orange primary color overrides */
+.navbar-primary, .brand-link, .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #FF6600 !important;
+}
+.accent-primary {
+    color: #FF6600 !important;
+}
+a, a:hover {
+    color: #FF6600 !important;
+}
+.btn-primary {
+    background-color: #FF6600 !important;
+    border-color: #FF6600 !important;
+}
