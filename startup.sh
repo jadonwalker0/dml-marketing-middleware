@@ -53,6 +53,7 @@ python workers/process_leads.py &
 
 # Collect static files (needed for Jazzmin CSS/JS)
 python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput
 
 # Start Gunicorn in foreground
 echo "Starting Gunicorn..."
