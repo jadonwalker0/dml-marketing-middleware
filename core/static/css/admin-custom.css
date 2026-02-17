@@ -1,14 +1,62 @@
-/* DML Orange primary color overrides */
-.navbar-primary, .brand-link, .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
-    background-color: #FF6600 !important;
+/* ── DML Orange – accent only, not everything ── */
+
+/* Navbar background */
+.navbar-primary {
+    background-color: #1a1a2e !important;
 }
-.accent-primary {
-    color: #FF6600 !important;
+
+/* Orange ONLY on the active sidebar item background */
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #FF6B00 !important;
+    color: #ffffff !important;
 }
-a, a:hover {
-    color: #FF6600 !important;
+
+/* Sidebar text stays white, not orange */
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link {
+    color: #c2c7d0 !important;
 }
+
+/* Brand/logo area */
+.brand-link {
+    border-bottom: 1px solid #FF6B00 !important;
+}
+
+/* Buttons */
 .btn-primary {
-    background-color: #FF6600 !important;
-    border-color: #FF6600 !important;
+    background-color: #FF6B00 !important;
+    border-color: #FF6B00 !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover {
+    background-color: #e05e00 !important;
+    border-color: #e05e00 !important;
+}
+
+/* Table column headers - orange to set them apart */
+#result_list thead th,
+#result_list thead th a {
+    color: #FF6B00 !important;
+    font-weight: 700;
+}
+
+/* Regular links in the body - keep default blue, not orange */
+.content-wrapper a {
+    color: #007bff !important;
+}
+.content-wrapper a:hover {
+    color: #0056b3 !important;
+}
+
+/* Body text stays dark/default */
+.content-wrapper,
+.content-wrapper p,
+.content-wrapper td,
+.content-wrapper label {
+    color: inherit !important;
+}
+
+/* Top navbar links stay white */
+.navbar .nav-link,
+.navbar .navbar-text {
+    color: #ffffff !important;
 }
