@@ -88,16 +88,29 @@ def sync_lead_to_total_expert(submission):
         
         # Prepare contact data
         contact_data = {
+            # contact's name and contact info
             "first_name": submission.first_name,
             "last_name": submission.last_name,
             "email": submission.email,
             "phone_cell": submission.phone,
-            "source": "webform",
+            # main source
+            "source": "Your LO Website Lead",
+            # owner assignment
             "owner": {
                 "external_id": submission.loan_officer.te_owner_id,
                 "email": submission.loan_officer.email
-            }
+            },
+            # custom fields
+            "custom": [
+                {
+                    # additional lead source data
+                    "Lead Source 1": "Web",
+                    "Lead Source 2": "Formidable LO Bio Page Form",
+                    "Website Lead Info": "Your LO Website Lead",
+                }
+            ],
         }
+        
         
         # Create/update contact in Total Expert
         response = requests.post(
