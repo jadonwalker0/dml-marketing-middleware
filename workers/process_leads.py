@@ -104,9 +104,9 @@ def sync_lead_to_total_expert(submission):
             "custom": [
                 {
                     # additional lead source data
-                    "Lead Source 1": "Web",
-                    "Lead Source 2": "Formidable LO Bio Page Form",
-                    "Website Lead Info": "Your LO Website Lead",
+                    "lead_source_1": "Web",
+                    "lead_source_2": "Formidable LO Bio Page Form",
+                    "website_lead_info": "Your LO Website Lead",
                 }
             ],
         }
