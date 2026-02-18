@@ -100,15 +100,21 @@ def sync_lead_to_total_expert(submission):
                 "external_id": submission.loan_officer.te_owner_id,
                 "email": submission.loan_officer.email
             },
-            # custom fields
+            # custom fields to inject
             "custom": [
                 {
-                    # additional lead source data
-                    "lead_source_1": "Web",
-                    "lead_source_2": "Formidable LO Bio Page Form",
-                    "website_lead_info": "Your LO Website Lead",
+                    "field_name": "lead_source_1",
+                    "value": "Web"
+                },
+                {
+                    "field_name": "lead_source_2",
+                    "value": "Formidable LO Bio Page Form"
+                },
+                {
+                    "field_name": "website_lead_info",
+                    "value": "Your LO Website Lead"
                 }
-            ],
+            ]
         }
         
         
