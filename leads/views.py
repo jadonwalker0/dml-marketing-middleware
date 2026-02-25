@@ -49,9 +49,9 @@ def webform_lead(request):
     
     # Get opt in status
     raw_opt_in = payload.get("comm_opt_in", "")
-    ok_to_email = raw_opt_in in (True, 1, "1", "true", "True", "yes", "on")
-    ok_to_call = raw_opt_in in (True, 1, "1", "true", "True", "yes", "on")
-    
+    ok_to_email = raw_opt_in is not None and raw_opt_in != ""
+    ok_to_call = ok_to_email
+
     # Extract and validate lo_slug
     lo_slug = (payload.get("lo_slug") or "").strip().lower()
     if not lo_slug:
