@@ -96,8 +96,8 @@ def sync_lead_to_total_expert(submission):
             # main source
             "source": "Your LO Website Lead",
             # opt in to comms status
-            "email_opt_in": submission.comm_opt_in,
-            "sms_opt_in": submission.comm_opt_in,
+            "ok_to_email": submission.comm_opt_in,
+            "ok_to_call": submission.comm_opt_in,
             # owner assignment
             "owner": {
                 "external_id": submission.loan_officer.te_owner_id,
