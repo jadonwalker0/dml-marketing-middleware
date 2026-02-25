@@ -49,7 +49,8 @@ def webform_lead(request):
     
     # Get opt in status
     raw_opt_in = payload.get("comm_opt_in", "")
-    comm_opt_in = raw_opt_in in (True, 1, "1", "true", "True", "yes", "on")
+    ok_to_email = raw_opt_in in (True, 1, "1", "true", "True", "yes", "on")
+    ok_to_call = payload.get("ok_to_call", "") in (True, 1, "1", "true", "True", "yes", "on")
 
     # Extract and validate lo_slug
     lo_slug = (payload.get("lo_slug") or "").strip().lower()
@@ -85,7 +86,8 @@ def webform_lead(request):
         last_name=(payload.get("last_name") or "").strip(),
         email=(payload.get("email") or "").strip(),
         phone=(payload.get("phone") or "").strip(),
-        comm_opt_in=comm_opt_in,
+        ok_to_email=ok_to_email,
+        ok_to_call=ok_to_call,
         raw_payload=payload,
         status=LeadStatus.RECEIVED,
     )
