@@ -47,6 +47,10 @@ def webform_lead(request):
         logger.warning(f"Invalid JSON in request: {e}")
         return JsonResponse({"error": "Invalid JSON payload"}, status=400)
     
+    # Get opt in status
+    raw_opt_in = payload.get("comm_opt_in", "")
+    comm_opt_in = raw_opt_in in (True, 1, "1", "true", "True", "yes", "on")
+
     # Extract and validate lo_slug
     lo_slug = (payload.get("lo_slug") or "").strip().lower()
     if not lo_slug:
@@ -81,6 +85,7 @@ def webform_lead(request):
         last_name=(payload.get("last_name") or "").strip(),
         email=(payload.get("email") or "").strip(),
         phone=(payload.get("phone") or "").strip(),
+        comm_opt_in=comm_opt_in,
         raw_payload=payload,
         status=LeadStatus.RECEIVED,
     )

@@ -45,6 +45,7 @@ class LeadSubmission(models.Model):
     last_name = models.CharField(max_length=80, blank=True, default="")
     email = models.EmailField(blank=True, default="", db_index=True)
     phone = models.CharField(max_length=30, blank=True, default="", db_index=True)
+    comm_opt_in = models.BooleanField(default=False)
     
     # Raw payload (store everything we received)
     raw_payload = models.JSONField(default=dict, help_text="Complete JSON payload from the form submission")
