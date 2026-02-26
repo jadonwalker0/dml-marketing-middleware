@@ -8,6 +8,7 @@ import time
 import json
 import logging
 from datetime import datetime
+from django.db import connection
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -170,6 +171,7 @@ def sync_lead_to_total_expert(submission):
 
 def process_message(message):
     """Process a single Service Bus message."""
+    connection.close()
     try:
         # Parse message body
         message_body = json.loads(str(message))
