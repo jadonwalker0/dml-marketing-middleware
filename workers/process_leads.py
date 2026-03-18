@@ -79,6 +79,60 @@ def get_te_access_token():
         raise
 
 
+def sms_opt_in(submission, access_token):
+    """
+    Opt a contact into SMS communications via Total Expert.
+
+    Called after successful contact creation, only when:
+      - submission.ok_to_call is True (lead checked the opt-in box)
+      - submission.phone is non-empty
+
+    Uses the LO's te_owner_id as the owning user (external_id).
+    Failure here is non-blocking — contact creation already succeeded.
+    """
+    if not submission.phone:
+        logger.info(f"Lead {submission.id} has no phone number, skipping SMS opt-in")
+        return
+
+    lo_external_id = submission.loan_officer.te_owner_id
+    if not lo_external_id:
+        logger.warning(f"Lead {submission.id}: LO has no te_owner_id, skipping SMS opt-in")
+        return
+
+    logger.info(f"Sending SMS opt-in for lead {submission.id} (LO external_id: {lo_external_id})...")
+
+    try:
+        payload = {
+            "phone_number": submission.phone,
+            "user": {
+                "external_id": lo_external_id
+            },
+            "status": "OPTED_IN"
+        }
+
+        response = requests.post(
+            f"{TE_API_URL}/v1/sms/opt-in",
+            json=payload,
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json"
+            }
+        )
+        response.raise_for_status()
+
+        logger.info(f"SMS opt-in successful for lead {submission.id}")
+
+    except requests.HTTPError as e:
+        # Non-blocking: log the error but do not affect the synced status
+        logger.error(
+            f"SMS opt-in HTTP error for lead {submission.id}: "
+            f"{e.response.status_code} - {e.response.text}"
+        )
+
+    except Exception as e:
+        logger.error(f"SMS opt-in unexpected error for lead {submission.id}: {e}")
+
+
 def sync_lead_to_total_expert(submission):
     """Sync a lead submission to Total Expert CRM."""
     logger.info(f"Syncing lead {submission.id} to Total Expert...")
@@ -121,7 +175,6 @@ def sync_lead_to_total_expert(submission):
             ]
         }
         
-        
         # Create/update contact in Total Expert
         response = requests.post(
             f"{TE_API_URL}/v1/contacts",
@@ -144,6 +197,16 @@ def sync_lead_to_total_expert(submission):
         submission.save()
         
         logger.info(f"Successfully synced lead {submission.id} to Total Expert (contact ID: {te_contact_id})")
+
+        # -------------------------------------------------------
+        # SMS opt-in: only if the lead explicitly opted in
+        # -------------------------------------------------------
+        if submission.ok_to_call:
+            sms_opt_in(submission, access_token)
+        else:
+            logger.info(f"Lead {submission.id} did not opt in to SMS, skipping opt-in call")
+        # -------------------------------------------------------
+
         return True
         
     except requests.HTTPError as e:
